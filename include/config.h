@@ -9,6 +9,7 @@
 const int sizeOfNebulae{ 5 };
 const int gravity{ 10000 }; //((pixels / seconds) / seconds)
 int jumpVel{ -2000 }; //(pixels / seconds)
+int nebVel{ -500 }; //(pixels / seconds)
 int velocity{ 0 }; //(pixels / seconds)
 float deltaTime{};
 bool IsInTheAir{};

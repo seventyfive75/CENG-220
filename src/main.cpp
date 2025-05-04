@@ -12,7 +12,7 @@ struct AnimData
 };
 
 bool IsOnTheGround(AnimData &data) {//data referans ile alýndý
-    return data.pos.y > SCREEN_HEIGHT - data.rec.height;
+    return data.pos.y > SCREEN_HEIGHT - data.rec.height - 10;
 }
 AnimData updateAnimData(AnimData &data, float deltaTime, int maxFrame) { //data referans ile alýndý
     data.runningTime += deltaTime;
@@ -63,7 +63,7 @@ int main() {
     Texture2D scarfy = LoadTexture("assets/scarfy.png");
     AnimData scarfyData{
         {0.0, 0.0, scarfy.width / 6, scarfy.height},
-        {SCREEN_WIDTH / 2 - scarfy.width / 12, SCREEN_HEIGHT - scarfy.height},
+        {SCREEN_WIDTH / 2 - scarfy.width / 12, SCREEN_HEIGHT - scarfy.height - 40},
         0,
         0,
         0.0,
@@ -81,7 +81,7 @@ int main() {
         nebulae[i].rec.y = 0.0;
         nebulae[i].rec.width = nebula.width / 8;
         nebulae[i].rec.height = nebula.height / 8;
-        nebulae[i].pos.x = SCREEN_WIDTH - i * 300;
+        nebulae[i].pos.x = SCREEN_WIDTH + i * 300;
         nebulae[i].pos.y = SCREEN_HEIGHT - nebula.height / 8;
         nebulae[i].frameX = 0;
         nebulae[i].frameY = 0;
@@ -155,14 +155,18 @@ int main() {
             nebulae[i] = updateAnimData(nebulae[i], deltaTime, 7);
         }
 
+        //obstacles moving codes
+        for (int i = 0; i < sizeOfNebulae; i++)
+        {
+            nebulae[i].pos.x += nebVel * deltaTime;
+        }
+
         //karakterin ve engellerin çizimi
         DrawTextureRec(scarfy, scarfyData.rec, scarfyData.pos, WHITE);
         for (int i = 0; i < sizeOfNebulae; i++)
         {
             DrawTextureRec(nebula, nebulae[i].rec, nebulae[i].pos, WHITE);
         }
-
-
 
         EndDrawing();
     }
