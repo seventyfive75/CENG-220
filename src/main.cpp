@@ -67,6 +67,7 @@ int main() {
             }
         }
 
+        //obstacles animation frame update
         for (int i = 0; i < sizeOfNebulae; i++)
         {
             nebulae[i].runningTime += deltaTime;
@@ -81,7 +82,7 @@ int main() {
                     nebulae[i].frameX = 0;
                     nebulae[i].frameY++;
                 }
-                if (nebulae[i].frameY > 7 && nebulae[i].frameX > 3)
+                if (nebulae[i].frameY > 7)
                 {
                     nebulae[i].frameY = 0;
                 }
@@ -98,8 +99,7 @@ int main() {
 
         EndDrawing();
     }
-
+    UnloadTexture(scarfy);
+    UnloadTexture(nebula);
     CloseWindow();
-
-    return 0;
 }
