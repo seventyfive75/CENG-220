@@ -11,6 +11,27 @@ struct AnimData
     float updateTime;
 };
 
+AnimData updateAnimData(AnimData data, float deltaTime, int maxFrame) {
+    data.runningTime += deltaTime;
+    if (data.runningTime >= data.updateTime)
+    {
+        data.runningTime = 0;
+        data.rec.x = data.frameX * data.rec.width;
+        data.rec.y = data.frameY * data.rec.height;
+        data.frameX++;
+        if (data.frameX > maxFrame)
+        {
+            data.frameX = 0;
+            data.frameY++;
+            if (data.frameY > maxFrame)
+            {
+                data.frameY = 0;
+            }
+        }
+    }
+    return data;
+}
+
 int main() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "RoHSLINDOS");
 
@@ -55,38 +76,12 @@ int main() {
 
 
         //scarfy animation frame update
-        scarfyData.runningTime += deltaTime;
-        if (scarfyData.runningTime >= scarfyData.updateTime)
-        {
-            scarfyData.runningTime = 0;
-            scarfyData.rec.x = scarfyData.frameX * scarfyData.rec.width;
-            scarfyData.frameX++;
-            if (scarfyData.frameX > 5)
-            {
-                scarfyData.frameX = 0;
-            }
-        }
+        scarfyData = updateAnimData(scarfyData, deltaTime, 5);
 
         //obstacles animation frame update
         for (int i = 0; i < sizeOfNebulae; i++)
         {
-            nebulae[i].runningTime += deltaTime;
-            if (nebulae[i].runningTime > nebulae[i].updateTime)
-            {
-                nebulae[i].runningTime = 0;
-                nebulae[i].rec.x = nebulae[i].frameX * nebulae[i].rec.width;
-                nebulae[i].rec.y = nebulae[i].frameY * nebulae[i].rec.height;
-                nebulae[i].frameX++;
-                if (nebulae[i].frameX > 7)
-                {
-                    nebulae[i].frameX = 0;
-                    nebulae[i].frameY++;
-                }
-                if (nebulae[i].frameY > 7)
-                {
-                    nebulae[i].frameY = 0;
-                }
-            }
+            nebulae[i] = updateAnimData(nebulae[i], deltaTime, 7);
         }
 
         //karakteri ve engelleri çizim
