@@ -7,5 +7,6 @@
 #define SCREEN_HEIGHT 600
 
 const int sizeOfNebulae{ 5 };
+float deltaTime{};
 
 #endif
