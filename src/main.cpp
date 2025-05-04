@@ -86,7 +86,7 @@ int main() {
             velocity += gravity * deltaTime;
         }
 
-        if (IsKeyPressed(KEY_SPACE))
+        if (IsKeyPressed(KEY_SPACE) && IsOnTheGround(scarfyData))
         {
             velocity = jumpVel;
         }
