@@ -6,4 +6,6 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
+const int sizeOfNebulae{ 5 };
+
 #endif
