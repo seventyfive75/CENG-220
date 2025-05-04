@@ -100,12 +100,16 @@ int main() {
     while (!WindowShouldClose()) {
         deltaTime = GetFrameTime();
 
+        bgPosX -= 200 * deltaTime;
+        mgPosX -= 400 * deltaTime;
+        fgPosX -= 800 * deltaTime;
+
         BeginDrawing();
         ClearBackground(WHITE);
 
-        Vector2 bgPos{ 0.0,0.0 };
-        Vector2 mgPos{ 0.0,0.0 };
-        Vector2 fgPos{ 0.0,0.0 };
+        Vector2 bgPos{ bgPosX,0.0 };
+        Vector2 mgPos{ mgPosX,0.0 };
+        Vector2 fgPos{ fgPosX,0.0 };
 
         DrawTextureEx(backGround, bgPos, 0.0, 3.125, WHITE);
         DrawTextureEx(midGround, mgPos, 0.0, 3.125, WHITE);

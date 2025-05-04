@@ -13,4 +13,8 @@ int velocity{ 0 }; //(pixels / seconds)
 float deltaTime{};
 bool IsInTheAir{};
 
+float bgPosX;
+float mgPosX;
+float fgPosX;
+
 #endif
