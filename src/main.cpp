@@ -93,27 +93,49 @@ int main() {
     Texture2D midGround = LoadTexture("assets/back-buildings.png");
     Texture2D foreGround = LoadTexture("assets/foreground.png");
 
-
-
-
     SetTargetFPS(60);
     while (!WindowShouldClose()) {
         deltaTime = GetFrameTime();
+
+        BeginDrawing();
+        ClearBackground(WHITE);
 
         bgPosX -= 200 * deltaTime;
         mgPosX -= 400 * deltaTime;
         fgPosX -= 800 * deltaTime;
 
-        BeginDrawing();
-        ClearBackground(WHITE);
+        if (bgPosX <= -backGround.width * 3.125)
+        {
+            bgPosX = 0;
+        }
+        if (mgPosX <= -midGround.width * 3.125)
+        {
+            mgPosX = 0;
+        }
+        if (fgPosX <= -foreGround.width * 3.125)
+        {
+            fgPosX = 0;
+        }
 
-        Vector2 bgPos{ bgPosX,0.0 };
-        Vector2 mgPos{ mgPosX,0.0 };
-        Vector2 fgPos{ fgPosX,0.0 };
+        Vector2 bg1Pos{ bgPosX,0.0 };
+        Vector2 mg1Pos{ mgPosX,0.0 };
+        Vector2 fg1Pos{ fgPosX,0.0 };
 
-        DrawTextureEx(backGround, bgPos, 0.0, 3.125, WHITE);
-        DrawTextureEx(midGround, mgPos, 0.0, 3.125, WHITE);
-        DrawTextureEx(foreGround, fgPos, 0.0, 3.125, WHITE);
+        Vector2 bg2Pos{ bgPosX + backGround.width * 3.125,0.0 };
+        Vector2 mg2Pos{ mgPosX + midGround.width * 3.125,0.0 };
+        Vector2 fg2Pos{ fgPosX + foreGround.width * 3.125,0.0 };
+
+        //backgrounds
+        DrawTextureEx(backGround, bg1Pos, 0.0, 3.125, WHITE);
+        DrawTextureEx(backGround, bg2Pos, 0.0, 3.125, WHITE);
+
+        //midgrounds
+        DrawTextureEx(midGround, mg1Pos, 0.0, 3.125, WHITE);
+        DrawTextureEx(midGround, mg2Pos, 0.0, 3.125, WHITE);
+
+        //foregrounds
+        DrawTextureEx(foreGround, fg1Pos, 0.0, 3.125, WHITE);
+        DrawTextureEx(foreGround, fg2Pos, 0.0, 3.125, WHITE);
 
         Gravity(scarfyData, deltaTime);
 
