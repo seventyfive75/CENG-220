@@ -70,15 +70,28 @@ int main() {
         nebulae[i].updateTime = 1.0 / 16.0;
     }
 
-    SetTargetFPS(165);
+    SetTargetFPS(60);
     while (!WindowShouldClose()) {
-
         deltaTime = GetFrameTime();
 
         BeginDrawing();
         ClearBackground(WHITE);
 
+        if (IsOnTheGround(scarfyData))
+        {
+            velocity = 0;
+        }
+        else
+        {
+            velocity += gravity * deltaTime;
+        }
 
+        if (IsKeyPressed(KEY_SPACE))
+        {
+            velocity = jumpVel;
+        }
+
+        scarfyData.pos.y += velocity * deltaTime;
 
         //scarfy animation frame update
         scarfyData = updateAnimData(scarfyData, deltaTime, 5);
@@ -89,7 +102,7 @@ int main() {
             nebulae[i] = updateAnimData(nebulae[i], deltaTime, 7);
         }
 
-        //karakteri ve engelleri çizim
+        //karakterin ve engellerin çizimi
         DrawTextureRec(scarfy, scarfyData.rec, scarfyData.pos, WHITE);
         for (int i = 0; i < sizeOfNebulae; i++)
         {
