@@ -89,12 +89,27 @@ int main() {
         nebulae[i].updateTime = 1.0 / 16.0;
     }
 
+    Texture2D backGround = LoadTexture("assets/far-buildings.png");
+    Texture2D midGround = LoadTexture("assets/back-buildings.png");
+    Texture2D foreGround = LoadTexture("assets/foreground.png");
+
+
+
+
     SetTargetFPS(60);
     while (!WindowShouldClose()) {
         deltaTime = GetFrameTime();
 
         BeginDrawing();
         ClearBackground(WHITE);
+
+        Vector2 bgPos{ 0.0,0.0 };
+        Vector2 mgPos{ 0.0,0.0 };
+        Vector2 fgPos{ 0.0,0.0 };
+
+        DrawTextureEx(backGround, bgPos, 0.0, 3.125, WHITE);
+        DrawTextureEx(midGround, mgPos, 0.0, 3.125, WHITE);
+        DrawTextureEx(foreGround, fgPos, 0.0, 3.125, WHITE);
 
         Gravity(scarfyData, deltaTime);
 
@@ -117,6 +132,7 @@ int main() {
         {
             DrawTextureRec(nebula, nebulae[i].rec, nebulae[i].pos, WHITE);
         }
+
 
 
         EndDrawing();
