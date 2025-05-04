@@ -11,12 +11,10 @@ struct AnimData
     float updateTime;
 };
 
-bool IsOnTheGround(AnimData data) {
+bool IsOnTheGround(AnimData &data) {//data referans ile alýndý
     return data.pos.y > SCREEN_HEIGHT - data.rec.height;
 }
-
-
-AnimData updateAnimData(AnimData data, float deltaTime, int maxFrame) {
+AnimData updateAnimData(AnimData &data, float deltaTime, int maxFrame) { //data referans ile alýndý
     data.runningTime += deltaTime;
     if (data.runningTime >= data.updateTime)
     {
@@ -35,6 +33,27 @@ AnimData updateAnimData(AnimData data, float deltaTime, int maxFrame) {
         }
     }
     return data;
+}
+// jump fonksiyonu
+void Jump(AnimData &data) { //data referans ile alýndý
+    if (IsKeyPressed(KEY_SPACE) && !IsInTheAir)
+    {
+        velocity = jumpVel;
+        IsInTheAir = true;
+    }
+}
+
+void Gravity(AnimData &data, float deltaTime) { //data referans ile alýndý
+    if (IsOnTheGround(data))
+    {
+        velocity = 0;
+        IsInTheAir = false;
+    }
+    else
+    {
+        velocity += gravity * deltaTime;
+        IsInTheAir = true;
+    }
 }
 
 int main() {
@@ -77,19 +96,9 @@ int main() {
         BeginDrawing();
         ClearBackground(WHITE);
 
-        if (IsOnTheGround(scarfyData))
-        {
-            velocity = 0;
-        }
-        else
-        {
-            velocity += gravity * deltaTime;
-        }
+        Gravity(scarfyData, deltaTime);
 
-        if (IsKeyPressed(KEY_SPACE) && IsOnTheGround(scarfyData))
-        {
-            velocity = jumpVel;
-        }
+        Jump(scarfyData);
 
         scarfyData.pos.y += velocity * deltaTime;
 
