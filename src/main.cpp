@@ -11,6 +11,11 @@ struct AnimData
     float updateTime;
 };
 
+bool IsOnTheGround(AnimData data) {
+    return data.pos.y > SCREEN_HEIGHT - data.rec.height;
+}
+
+
 AnimData updateAnimData(AnimData data, float deltaTime, int maxFrame) {
     data.runningTime += deltaTime;
     if (data.runningTime >= data.updateTime)
