@@ -100,9 +100,9 @@ int main() {
         BeginDrawing();
         ClearBackground(WHITE);
 
-        bgPosX -= 200 * deltaTime;
-        mgPosX -= 400 * deltaTime;
-        fgPosX -= 800 * deltaTime;
+        bgPosX -= 100 * deltaTime;
+        mgPosX -= 200 * deltaTime;
+        fgPosX -= 400 * deltaTime;
 
         if (bgPosX <= -backGround.width * 3.125)
         {
@@ -144,7 +144,10 @@ int main() {
         scarfyData.pos.y += velocity * deltaTime;
 
         //scarfy animation frame update
-        scarfyData = updateAnimData(scarfyData, deltaTime, 5);
+        if (IsOnTheGround(scarfyData))
+        {
+            scarfyData = updateAnimData(scarfyData, deltaTime, 5);
+        }
 
         //obstacles animation frame update
         for (int i = 0; i < sizeOfNebulae; i++)
