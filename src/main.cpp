@@ -101,6 +101,8 @@ int main() {
     Texture2D midGround = LoadTexture("assets/back-buildings.png");
     Texture2D foreGround = LoadTexture("assets/foreground.png");
 
+    float finishline{ nebulae[sizeOfNebulae - 1].pos.x };
+
     SetTargetFPS(60);
     while (!WindowShouldClose()) {
         deltaTime = GetFrameTime(); // pixel per frame den pixel per second a geçiþ
@@ -178,11 +180,12 @@ int main() {
         
         for (AnimData templeData : nebulae)
         {
+            float pad{ 50 };
             Rectangle nebRec{
-                templeData.pos.x,
-                templeData.pos.y,
-                templeData.rec.width,
-                templeData.rec.height
+                templeData.pos.x + pad,
+                templeData.pos.y + pad,
+                templeData.rec.width - 2 * pad,
+                templeData.rec.height - 2 * pad
             };
 
             Rectangle scarfyRec{
@@ -199,12 +202,28 @@ int main() {
 
         }
 
-        //karakterin ve engellerin çizimi
-        DrawTextureRec(scarfy, scarfyData.rec, scarfyData.pos, WHITE);
-        for (int i = 0; i < sizeOfNebulae; i++)
+        if (collision)
         {
-            DrawTextureRec(nebula, nebulae[i].rec, nebulae[i].pos, WHITE);
+            //çarpýþma var bir þey çizilmeyecek.
+            DrawText("Game Over!", SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2, 40, RED);
         }
+        else if (scarfyData.pos.x >= finishline && !IsInTheAir)
+        {
+            //oyuncu oyunu kazandý
+            DrawText("You Win!", SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2, 40, RED);   
+        }
+        else
+        {
+            //çarpýþma yok oyun devam ediyor.
+            //karakterin ve engellerin çizimi
+            DrawTextureRec(scarfy, scarfyData.rec, scarfyData.pos, WHITE);
+            for (int i = 0; i < sizeOfNebulae; i++)
+            {
+                DrawTextureRec(nebula, nebulae[i].rec, nebulae[i].pos, WHITE);
+            }
+        }
+
+
 
         EndDrawing();
     }

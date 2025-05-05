@@ -13,7 +13,6 @@ int nebVel{ -500 }; //(pixels / seconds)
 int velocity{ 0 }; //(pixels / seconds)
 float deltaTime{};
 bool IsInTheAir{};
-float finishline{};
 bool collision{};
 
 float bgPosX;
