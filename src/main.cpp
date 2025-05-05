@@ -40,9 +40,48 @@ AnimData updateAnimData(AnimData &data, float deltaTime, int maxFrame) { //data 
     }
     return data;
 }
+
+void ResetGame(AnimData& scarfyData, AnimData nebulae[], Texture2D scarfy, Texture2D nebula) {
+    // scarfy baþlangýç
+    scarfyData.rec.x = 0.0;
+    scarfyData.rec.y = 0.0;
+    scarfyData.rec.width = scarfy.width / 6;
+    scarfyData.rec.height = scarfy.height;
+    scarfyData.pos.x = SCREEN_WIDTH / 2 - scarfy.width / 12;
+    scarfyData.pos.y = SCREEN_HEIGHT - (scarfy.height - 40);
+    scarfyData.frameX = 0;
+    scarfyData.frameY = 0;
+    scarfyData.runningTime = 0.0;
+    scarfyData.updateTime = 1.0 / 12.0;
+
+    for (int i = 0; i < sizeOfNebulae; i++)
+    {
+        nebulae[i].rec.x = 0.0;
+        nebulae[i].rec.y = 0.0;
+        nebulae[i].rec.width = nebula.width / 8;
+        nebulae[i].rec.height = nebula.height / 8;
+        nebulae[i].pos.x = SCREEN_WIDTH + i * 300;
+        nebulae[i].pos.y = SCREEN_HEIGHT - nebula.height / 8;
+        nebulae[i].frameX = 0;
+        nebulae[i].frameY = 0;
+        nebulae[i].runningTime = 0.0;
+        nebulae[i].updateTime = 1.0 / 16.0;
+    }
+
+    finishline = nebulae[sizeOfNebulae - 1].pos.x;
+    velocity = 0;
+    IsInTheAir = false;
+    collision = false;
+    IsGameContinues = true;
+
+    bgPosX = 0;
+    mgPosX = 0;
+    fgPosX = 0;
+}
+
 // jump fonksiyonu
 void Jump(AnimData &data) { //data referans ile alýndý
-    if (IsKeyPressed(KEY_SPACE) && !IsInTheAir)
+    if (IsKeyPressed(KEY_SPACE) && !IsInTheAir && IsGameContinues)
     {
         velocity = jumpVel;
         IsInTheAir = true;
@@ -102,13 +141,19 @@ int main() {
     Texture2D foreGround = LoadTexture("assets/foreground.png");
 
     float finishline{ nebulae[sizeOfNebulae - 1].pos.x };
-
+    IsGameContinues = true;
+    
     SetTargetFPS(60);
     while (!WindowShouldClose()) {
         deltaTime = GetFrameTime(); // pixel per frame den pixel per second a geçiþ
 
         BeginDrawing();
         ClearBackground(WHITE);
+
+        if ((collision || !IsGameContinues) && IsKeyPressed(KEY_R))
+        {
+            ResetGame(scarfyData, nebulae, scarfy, nebula);
+        }
 
         //arkaplan kaymasýnýn hýz deðerleri
         bgPosX -= 100 * deltaTime;
@@ -207,12 +252,13 @@ int main() {
             //çarpýþma var bir þey çizilmeyecek.
             DrawText("Game Over!", SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2, 40, RED);
         }
-        else if (scarfyData.pos.x >= finishline && !IsInTheAir)
+        else if (scarfyData.pos.x >= finishline && !IsInTheAir && !collision)
         {
             //oyuncu oyunu kazandý
-            DrawText("You Win!", SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2, 40, RED);   
+            DrawText("You Win!", SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2, 40, RED);
+            IsGameContinues = false;
         }
-        else
+        else if (IsGameContinues)
         {
             //çarpýþma yok oyun devam ediyor.
             //karakterin ve engellerin çizimi
