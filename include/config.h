@@ -6,13 +6,15 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
-const int sizeOfNebulae{ 5 };
+const int sizeOfNebulae{ 10};
 const int gravity{ 10000 }; //((pixels / seconds) / seconds)
 int jumpVel{ -2000 }; //(pixels / seconds)
 int nebVel{ -500 }; //(pixels / seconds)
 int velocity{ 0 }; //(pixels / seconds)
 float deltaTime{};
 bool IsInTheAir{};
+float finishline{};
+bool collision{};
 
 float bgPosX;
 float mgPosX;

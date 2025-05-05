@@ -14,6 +14,8 @@ struct AnimData
 bool IsOnTheGround(AnimData &data) {//data referans ile alýndý
     return data.pos.y > SCREEN_HEIGHT - data.rec.height - 10;
 }
+
+//animasyon güncelleme fonksiyonu
 AnimData updateAnimData(AnimData &data, float deltaTime, int maxFrame) { //data referans ile alýndý
     data.runningTime += deltaTime;
     if (data.runningTime >= data.updateTime)
@@ -31,6 +33,10 @@ AnimData updateAnimData(AnimData &data, float deltaTime, int maxFrame) { //data 
                 data.frameY = 0;
             }
         }
+        if (data.frameY == maxFrame && data.frameX == 3)
+        {
+            data.frameY = 0;
+        }
     }
     return data;
 }
@@ -43,6 +49,7 @@ void Jump(AnimData &data) { //data referans ile alýndý
     }
 }
 
+//yerçekimi
 void Gravity(AnimData &data, float deltaTime) { //data referans ile alýndý
     if (IsOnTheGround(data))
     {
@@ -89,21 +96,24 @@ int main() {
         nebulae[i].updateTime = 1.0 / 16.0;
     }
 
+    //background
     Texture2D backGround = LoadTexture("assets/far-buildings.png");
     Texture2D midGround = LoadTexture("assets/back-buildings.png");
     Texture2D foreGround = LoadTexture("assets/foreground.png");
 
     SetTargetFPS(60);
     while (!WindowShouldClose()) {
-        deltaTime = GetFrameTime();
+        deltaTime = GetFrameTime(); // pixel per frame den pixel per second a geçiþ
 
         BeginDrawing();
         ClearBackground(WHITE);
 
+        //arkaplan kaymasýnýn hýz deðerleri
         bgPosX -= 100 * deltaTime;
         mgPosX -= 200 * deltaTime;
         fgPosX -= 400 * deltaTime;
 
+        //arkaplaný döngüye sokma
         if (bgPosX <= -backGround.width * 3.125)
         {
             bgPosX = 0;
@@ -117,6 +127,7 @@ int main() {
             fgPosX = 0;
         }
 
+        //arkaplan konum 
         Vector2 bg1Pos{ bgPosX,0.0 };
         Vector2 mg1Pos{ mgPosX,0.0 };
         Vector2 fg1Pos{ fgPosX,0.0 };
@@ -141,6 +152,7 @@ int main() {
 
         Jump(scarfyData);
 
+        //hareket main character
         scarfyData.pos.y += velocity * deltaTime;
 
         //scarfy animation frame update
@@ -161,6 +173,32 @@ int main() {
             nebulae[i].pos.x += nebVel * deltaTime;
         }
 
+        //finish line son obstaclesýn anlýk konumuna atama
+        finishline += nebVel * deltaTime;
+        
+        for (AnimData templeData : nebulae)
+        {
+            Rectangle nebRec{
+                templeData.pos.x,
+                templeData.pos.y,
+                templeData.rec.width,
+                templeData.rec.height
+            };
+
+            Rectangle scarfyRec{
+                scarfyData.pos.x,
+                scarfyData.pos.y,
+                scarfyData.rec.width,
+                scarfyData.rec.height
+            };
+
+            if (CheckCollisionRecs(nebRec, scarfyRec))
+            {
+                collision = true;
+            }
+
+        }
+
         //karakterin ve engellerin çizimi
         DrawTextureRec(scarfy, scarfyData.rec, scarfyData.pos, WHITE);
         for (int i = 0; i < sizeOfNebulae; i++)
@@ -170,6 +208,9 @@ int main() {
 
         EndDrawing();
     }
+    UnloadTexture(backGround);
+    UnloadTexture(midGround);
+    UnloadTexture(foreGround);
     UnloadTexture(scarfy);
     UnloadTexture(nebula);
     CloseWindow();
