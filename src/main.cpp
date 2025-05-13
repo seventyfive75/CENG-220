@@ -1,20 +1,25 @@
 #include "raylib.h"
 
-int main() {
+int main()
+{
+    const int WINDOW_WIDTH = 800, WINDOW_HEIGHT = 600;
+    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Raylib Game");
 
-    const int SCREEN_WIDTH = 800, SCREEN_HEIGHT = 600;
+    Texture2D map = LoadTexture("nature_tileset/OpenWorldMap24x24.png");
 
-    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "RoHSLINDOS");
-    
-    while (!WindowShouldClose)
+    Vector2 mapPos{ 0.0, 0.0 };
+
+    SetTargetFPS(60);
+    while (!WindowShouldClose())
     {
-
         BeginDrawing();
+        ClearBackground(WHITE);
 
+
+        DrawTextureEx(map, mapPos, 0.0, 4.0, WHITE);
 
         EndDrawing();
-
     }
-
     CloseWindow();
 }
+
