@@ -11,15 +11,23 @@ int main()
     float currentSpeedX = 0.0f;
     float currentSpeedY = 0.0f;
     float deltaTime{};
-    float moveX{};
+    float moveX{}; 
     float moveY{};
+    float runningTime{};
+    int frame{};
+    const int maxFrames{ 6 };
+    const float updateTime{ 1.f / 12.f };
+    float facingDirection{1.0f}; //default sað
+
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Raylib Game");
 
     Texture2D map = LoadTexture("nature_tileset/OpenWorldMap24x24.png");
     Vector2 mapPos{ 0.0, 0.0 };
 
-    Texture2D knight = LoadTexture("characters/knight_idle_spritesheet.png");
+    Texture2D knight_idle = LoadTexture("characters/knight_idle_spritesheet.png"); //durma
+    Texture2D knight_run = LoadTexture("characters/knight_run_spritesheet.png"); //koþma
+    Texture2D knight = LoadTexture("characters/knight_idle_spritesheet.png"); //ana tex
     Vector2 knightPos{
         (float)SCREEN_WIDTH / 2.0f - 4.0f * (0.5f * (float)knight.width / 6.0f),
         (float)SCREEN_HEIGHT / 2.0f - 4.0f * (0.5f * (float)knight.height)
@@ -32,7 +40,6 @@ int main()
          1.0f
     };
 
-
     SetTargetFPS(60);
     while (!WindowShouldClose())
     {
@@ -43,9 +50,15 @@ int main()
         //UPDATE KISMI
         deltaTime = GetFrameTime();
 
+        //Çapraz daha hýzlý gitmeyi önleme
+        Vector2 moveDir = { moveX, moveY };
+        if (Vector2Length(moveDir) > 0) {
+            moveDir = Vector2Normalize(moveDir);
+        }
+
         //hareket için targetSpeed belirleme
-        targetSpeedX = moveX * playerSpeed;
-        targetSpeedY = moveY * playerSpeed;
+        targetSpeedX = moveDir.x * playerSpeed;
+        targetSpeedY = moveDir.y * playerSpeed;
 
         //ivmeli hareket için lerp
         currentSpeedX = Lerp(currentSpeedX, targetSpeedX, 10.0f * deltaTime);
@@ -70,6 +83,21 @@ int main()
         }
         
         //belki kamera için de ileride lerp???
+
+        //karakter duruyor mu koþuyor mu
+        knight = (moveX != 0.0f || moveY != 0.0f) ? knight_run : knight_idle;
+
+        //facing direction update
+        if (moveX != 0) facingDirection = (moveX > 0) ? 1.0f : -1.0f;
+
+        // sprite sheet i güncelleme
+        runningTime += deltaTime;
+        if (runningTime >= updateTime)
+        {
+            frame++;
+            runningTime = 0.f;
+            if (frame > maxFrames) frame = 0;
+        }
         
         //ÇÝZÝM KISMI
         BeginDrawing();
@@ -81,14 +109,19 @@ int main()
                 DrawTextureEx(map, mapPos, 0.0, 4.0, WHITE);
             
                 //karakter çizimi
-                Rectangle source{ 0.f, 0.f, (float)knight.width / 6.f, (float)knight.height };
+                Rectangle source{ frame * (float)knight.width / 6.f, 0.f, facingDirection * (float)knight.width / 6.f, (float)knight.height };
                 Rectangle dest{ knightPos.x, knightPos.y, 4.0f * (float)knight.width / 6.0f, 4.0f * (float)knight.height };
                 DrawTexturePro(knight, source, dest, Vector2{}, 0.f, WHITE);
-
 
             EndMode2D();
         EndDrawing();
     }
+
+    UnloadTexture(knight);
+    UnloadTexture(knight_idle);
+    UnloadTexture(knight_run);
+    UnloadTexture(map);
     CloseWindow();
+
 }
 
