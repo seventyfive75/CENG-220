@@ -2,4 +2,6 @@
 *bin/
 *build/
 *.sln
-/RoHSLINDOS/
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.users
