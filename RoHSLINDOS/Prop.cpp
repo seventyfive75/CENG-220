@@ -16,7 +16,7 @@ void Prop::Render() {
     DrawTextureEx(texture, worldPos, 0.0f, scale, WHITE);
 }
 
-Rectangle Prop::getCollisionRec(Vector2 Character_Pos) const {
+Rectangle Prop::getCollisionRec() const {
     return Rectangle{
         worldPos.x,
         worldPos.y,

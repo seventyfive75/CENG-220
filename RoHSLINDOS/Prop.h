@@ -7,7 +7,7 @@ public:
     Prop(Vector2 pos, Texture2D tex);
 
     void Render();
-    Rectangle getCollisionRec(Vector2 Character_Pos) const;
+    Rectangle getCollisionRec() const;
 
 private:
     Texture2D texture;
