@@ -8,8 +8,10 @@ public:
 
     void tick(float deltaTime, Camera2D& camera);
     void draw();
+    void undoMovement();
 
     Vector2 getPosition() const;
+    Rectangle getCollisionRec() const;
 
 private:
     Texture2D knight_idle;
@@ -17,6 +19,7 @@ private:
     Texture2D currentTexture;
 
     Vector2 position{};
+    Vector2 worldPosLastFrame{};
     float moveX{}, moveY{};
     float speed;
 

@@ -8,7 +8,10 @@ Character::Character(Vector2 pos, float s, int screenWidth, int screenHeight, in
     currentTexture = knight_idle;
 }
 
-void Character::tick(float deltaTime, Camera2D& camera)    {
+void Character::tick(float deltaTime, Camera2D& camera) 
+{
+    worldPosLastFrame = position;
+
     moveX = IsKeyDown(KEY_D) - IsKeyDown(KEY_A);
     moveY = IsKeyDown(KEY_S) - IsKeyDown(KEY_W);
 
@@ -57,4 +60,18 @@ void Character::draw() {
 
 Vector2 Character::getPosition() const {
     return position;
+}
+
+void Character::undoMovement()
+{
+    position = worldPosLastFrame;
+}
+
+Rectangle Character::getCollisionRec() const {
+    return Rectangle{
+        position.x,
+        position.y,
+        (float)currentTexture.width / 6.0f * 4.0f,
+        (float)currentTexture.height * 4.0f
+    };
 }
