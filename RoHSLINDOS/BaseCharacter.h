@@ -9,7 +9,6 @@ public:
     virtual void tick(float deltaTime); // override edilir
     virtual void draw() const;
 
-
     Vector2 getPosition() const;
     Rectangle getCollisionRec() const;
     void undoMovement();
@@ -32,7 +31,7 @@ protected:
     int frame{};
     float runningTime{};
     const int maxFrames{ 6 };
-    const float updateTime{ 1.f / 12.f };
+    const float updateTime{ 1.0f / 6.0f };
 
     void updateAnimation(float deltaTime);
 };

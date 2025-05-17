@@ -29,7 +29,7 @@ int main()
     //prop
     Prop props[sizeOfProps];
     for (int i = 0; i < sizeOfProps; i++) {
-        SetRandomSeed(1234);
+        SetRandomSeed(i);
         float randomPosX = GetRandomValue(500, 3060);
         float randomPosY = GetRandomValue(500, 3060);
         props[i] = Prop(Vector2{randomPosX,randomPosY}, LoadTexture("nature_tileset/Rock.png"));
