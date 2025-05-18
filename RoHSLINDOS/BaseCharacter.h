@@ -7,7 +7,12 @@ public:
     virtual ~BaseCharacter() {}
 
     virtual void tick(float deltaTime); // override edilir
-    virtual void draw() const;
+    virtual void draw();
+    bool getAlive() const;
+    void setAlive(bool alive);
+    Rectangle getWeaponCollisionRec() { return weaponCollisionRec; }
+    float getHealth() { return health; }
+    void takeDamage(float damage);
 
     Vector2 getPosition() const;
     Rectangle getCollisionRec() const;
@@ -33,5 +38,17 @@ protected:
     const int maxFrames{ 6 };
     const float updateTime{ 1.0f / 6.0f };
 
+    float health{};
+    float enemyDamage{};
+    float knightDamage{10000};
+
+    Texture2D weapon{ LoadTexture("characters/weapon_sword.png") };
+    Rectangle weaponCollisionRec{};
+
     void updateAnimation(float deltaTime);
+
+
+private:
+    bool alive{ true };
+
 };
