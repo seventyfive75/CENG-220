@@ -14,7 +14,10 @@ void BaseCharacter::updateAnimation(float deltaTime) {
     }
 }
 
-void BaseCharacter::draw() const {
+void BaseCharacter::draw() {
+
+    if (!getAlive()) return;
+
     Rectangle source{ frame * (float)currentTexture.width / 6.f, 0.f,
                       facingDirection * (float)currentTexture.width / 6.f,
                       (float)currentTexture.height };
@@ -22,9 +25,11 @@ void BaseCharacter::draw() const {
                     4.0f * (float)currentTexture.width / 6.0f,
                     4.0f * (float)currentTexture.height };
     DrawTexturePro(currentTexture, source, dest, Vector2{}, 0.f, WHITE);
+
 }
 
 void BaseCharacter::tick(float deltaTime) {
+
     worldPosLastFrame = position;
 
     Vector2 moveDir = { moveX, moveY };
@@ -61,4 +66,23 @@ Rectangle BaseCharacter::getCollisionRec() const {
 
 void BaseCharacter::undoMovement() {
     position = worldPosLastFrame;
+}
+
+bool BaseCharacter::getAlive() const
+{
+    return alive;
+}
+
+void BaseCharacter::setAlive(bool alive)
+{
+    this->alive = alive;
+}
+
+void BaseCharacter::takeDamage(float damage)
+{
+    health -= damage;
+    if (health < 0.f)
+    {
+        setAlive(false);
+    }
 }
