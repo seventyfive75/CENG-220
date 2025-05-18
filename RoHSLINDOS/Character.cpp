@@ -73,13 +73,5 @@ void Character::draw() {
     DrawTexturePro(weapon, source, dest, origin, rotation, WHITE);
 
 
-    DrawRectangleLines(
-        getWeaponCollisionRec().x,
-        getWeaponCollisionRec().y,
-        weaponCollisionRec.width,
-        weaponCollisionRec.height,
-        RED
-    );
-
 }
 
